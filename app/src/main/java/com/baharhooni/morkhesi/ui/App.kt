@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.baharhooni.morkhesi.ui
+import com.baharhooni.morkhesi.R
 
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
