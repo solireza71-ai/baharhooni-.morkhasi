@@ -2,8 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ]
-  workflow_dispatch:   # امکان اجرای دستی از تب Actions
+    branches: [main, master]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,16 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check google-services.json
+      - name: Check Firebase config
         run: |
-          if [ ! -f app/google-services.json ]; then
-            echo "::error::فایل app/google-services.json پیدا نشد. آن را از Firebase Console دانلود کنید و داخل پوشه app در GitHub آپلود کنید."
-            exit 1
-          fi
-          if ! grep -q "com.baharhooni.morkhesi" app/google-services.json; then
-            echo "::error::نام پکیج داخل google-services.json برابر com.baharhooni.morkhesi نیست. اپ اندروید را در Firebase با همین نام پکیج ثبت کنید."
-            exit 1
-          fi
+          test -f app/google-services.json || exit 1
+          grep -q "com.baharhooni.morkhesi" app/google-services.json || exit 1
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -37,12 +31,21 @@ jobs:
         with:
           gradle-version: 8.10.2
 
-      - name: Build debug APK
-        run: gradle assembleDebug --stacktrace
+      - name: Build APK and save full log
+        run: |
+          set -o pipefail
+          gradle assembleDebug --stacktrace --console=plain 2>&1 | tee build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-Build-Log
+          path: build.log
+          if-no-files-found: warn
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MorkhesiBaharHooni-v1.5-APK
+          name: MorkhesiBaharHooni-APK
           path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
