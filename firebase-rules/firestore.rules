@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isManager() {
+      return signedIn() && get(/databases/$(database)/documents/appConfig/manager).data.uid == request.auth.uid;
+    }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    match /appConfig/{docId} {
+      allow read: if signedIn() && docId == 'manager';
+      allow write: if false;
+    }
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isManager();
+      allow create: if isManager();
+      allow update: if isManager() || (isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt']));
+      allow delete: if false;
+    }
+    match /leaveBalances/{uid} {
+      allow read: if isOwner(uid) || isManager();
+      allow write: if false;
+    }
+    match /leaveRequests/{requestId} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isManager());
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid && request.resource.data.status == 'PENDING';
+      allow update: if isManager() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'managerNote']);
+      allow delete: if false;
+    }
+    match /leaveTransactions/{transactionId} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isManager());
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "baharhooni-functions",
+  "description": "Secure employee account provisioning for Morkhesi Bahar Hooni",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": { "firebase-admin": "^12.7.0", "firebase-functions": "^6.1.1" }
+}

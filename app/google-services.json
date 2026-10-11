@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "351494151860",
+    "project_id": "baharhoonileave",
+    "storage_bucket": "baharhoonileave.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:351494151860:android:2b88ae1545784a445301e1",
+        "android_client_info": {
+          "package_name": "com.baharhooni.morkhesi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoxcjmIbFNJhwb76FgU_G7ULeRuROyl_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
