@@ -70,6 +70,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.baharhooni.morkhesi.R
 import com.baharhooni.morkhesi.data.FirebaseRepository
 import com.baharhooni.morkhesi.data.LeaveBalance
 import com.baharhooni.morkhesi.data.LeaveRequest
